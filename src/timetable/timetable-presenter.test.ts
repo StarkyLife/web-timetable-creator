@@ -1,4 +1,5 @@
-import { i18n } from './i18n';
+import { i18n } from '../i18n';
+
 import { presentTimetable } from './timetable-presenter';
 
 it('should return empty view model given no arguments', () => {

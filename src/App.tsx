@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 
+import { NewTimetable } from './timetable/new-timetable-component';
+import { TimetablesList } from './timetables-list/timetables-list-component';
 import { AppRoutes } from './app-routes';
-import { NewTimetable } from './new-timetable';
-import { TimetablesList } from './timetables-list';
 
 export const App: React.FC = () => (
     <Container>

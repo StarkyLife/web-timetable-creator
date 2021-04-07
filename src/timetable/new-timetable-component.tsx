@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Timetable } from './timetable';
+import { Timetable } from './timetable-component';
 import { presentTimetable } from './timetable-presenter';
 
 export const NewTimetable: React.FC = () => {

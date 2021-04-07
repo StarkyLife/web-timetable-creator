@@ -1,5 +1,6 @@
-import { TimetableViewModel } from './view-models/timetable-view-model';
-import { i18n } from './i18n';
+import { i18n } from '../i18n';
+
+import { TimetableViewModel } from './timetable-view-model';
 
 export function presentTimetable(): TimetableViewModel {
     return {

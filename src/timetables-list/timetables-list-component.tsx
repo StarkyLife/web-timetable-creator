@@ -9,10 +9,11 @@ import {
     Typography,
 } from '@material-ui/core';
 
-import { fetchers } from './api/fetchers';
-import { TimetablesListViewModel } from './view-models/timetables-list-view-model';
-import { AppRoutes } from './app-routes';
+import { fetchers } from '../api/fetchers';
+import { AppRoutes } from '../app-routes';
+
 import { presentTimetablesList } from './timetables-list-presenter';
+import { TimetablesListViewModel } from './timetables-list-view-model';
 
 export const TimetablesList: React.FC = () => {
     const history = useHistory();

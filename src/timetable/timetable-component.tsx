@@ -3,7 +3,7 @@ import {
     Box, Button, TextField, Typography,
 } from '@material-ui/core';
 
-import { TimetableViewModel } from './view-models/timetable-view-model';
+import { TimetableViewModel } from './timetable-view-model';
 
 export const Timetable: React.FC<TimetableViewModel> = ({ title, inputName, submitButtonName }) => (
     <Box>

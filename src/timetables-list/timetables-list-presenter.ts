@@ -1,6 +1,7 @@
-import { TimetablesShortInfo } from './api/models';
-import { TimetablesListViewModel } from './view-models/timetables-list-view-model';
-import { i18n } from './i18n';
+import { TimetablesShortInfo } from '../api/models';
+import { i18n } from '../i18n';
+
+import { TimetablesListViewModel } from './timetables-list-view-model';
 
 export function presentTimetablesList(
     timetables?: TimetablesShortInfo[],
