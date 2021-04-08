@@ -3,8 +3,8 @@ import {
     Box, Button, TextField, Typography,
 } from '@material-ui/core';
 
-import { createSubmitHandler } from './timetable-controller';
-import { TimetableViewModel } from './timetable-view-model';
+import { TimetableViewModel } from '../models/timetable-view-model';
+import { createSubmitHandler } from '../timetable-controller';
 
 type Props = TimetableViewModel & { onSubmit: ReturnType<typeof createSubmitHandler> };
 

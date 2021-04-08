@@ -1,7 +1,7 @@
 import { fetchers } from '../api/fetchers';
 import { AppRoutes } from '../app-routes';
 
-import { TimetableFormFields } from './timetable-form-fields-model';
+import { TimetableFormFields } from './models/timetable-form-fields-model';
 
 export type TimetableSubmitErrorHandler = (error: Error) => void;
 export type TimetableSubmitRedirectHandler = (path: string) => void;

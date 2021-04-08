@@ -13,4 +13,10 @@ export const fetchers = {
     async saveTimetable(timetable: Timetable): Promise<void> {
         await axiosInstance.post('/timetable', timetable);
     },
+    async getTimetable(id: string): Promise<Timetable> {
+        return (await axiosInstance.get(`/timetable/${id}`)).data;
+    },
+    async deleteTimetable(id: string): Promise<void> {
+        await axiosInstance.delete(`/timetable/${id}`);
+    },
 };

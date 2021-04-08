@@ -2,13 +2,13 @@
 
 import { AppRoutes } from '../app-routes';
 
+import { TimetableFormFields } from './models/timetable-form-fields-model';
 import {
     createSubmitHandler,
     TimetableSubmitErrorHandler,
     TimetableSubmitRedirectHandler,
     TimetableSubmitSaveHandler,
 } from './timetable-controller';
-import { TimetableFormFields } from './timetable-form-fields-model';
 
 const DEFAULT_FORM_DATA: TimetableFormFields = { name: 'timetable' };
 

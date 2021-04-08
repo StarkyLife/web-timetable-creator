@@ -12,8 +12,8 @@ import {
 import { fetchers } from '../api/fetchers';
 import { AppRoutes } from '../app-routes';
 
-import { presentTimetablesList } from './timetables-list-presenter';
-import { TimetablesListViewModel } from './timetables-list-view-model';
+import { presentTimetablesList } from './presenter';
+import { TimetablesListViewModel } from './view-model';
 
 export const TimetablesList: React.FC = () => {
     const history = useHistory();

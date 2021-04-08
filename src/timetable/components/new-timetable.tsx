@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { fetchers } from '../api/fetchers';
+import { fetchers } from '../../api/fetchers';
+import { createSubmitHandler } from '../timetable-controller';
+import { presentTimetable } from '../timetable-presenter';
 
-import { Timetable } from './timetable-component';
-import { createSubmitHandler } from './timetable-controller';
-import { presentTimetable } from './timetable-presenter';
+import { Timetable } from './timetable-form';
 
 // eslint-disable-next-line no-alert
 const errorHandler = () => alert('Something is wrong!');
