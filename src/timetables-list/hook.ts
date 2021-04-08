@@ -16,6 +16,7 @@ export function useTimetablesListController() {
 
     const controller = useMemo(() => createTimetablesListController({
         timetablesFetcher: fetchers.getTimetablesShortInfoList,
+        timetableDeleteFetcher: fetchers.deleteTimetable,
         timetablesPresenter: (timetables) => {
             setTimetablesVM(presentTimetablesList(timetables));
         },
@@ -25,7 +26,7 @@ export function useTimetablesListController() {
     }), [setTimetablesVM, history]);
 
     useEffect(() => {
-        controller.presentTimetables();
+        controller.initializeTimetablesList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

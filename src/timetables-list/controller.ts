@@ -4,6 +4,7 @@ import { AppRoutes } from '../app-routes';
 
 export type TimetablesListControllerDependencies = {
     timetablesFetcher: typeof fetchers.getTimetablesShortInfoList;
+    timetableDeleteFetcher: typeof fetchers.deleteTimetable;
     timetablesPresenter: (timetables: TimetablesShortInfo[]) => void;
     errorHandler: (error: Error) => void;
     redirectHandler: (path: string) => void;
@@ -11,23 +12,33 @@ export type TimetablesListControllerDependencies = {
 
 export function createTimetablesListController({
     timetablesFetcher,
+    timetableDeleteFetcher,
     timetablesPresenter,
     errorHandler,
     redirectHandler,
 }: TimetablesListControllerDependencies) {
+    async function loadTimetables() {
+        timetablesPresenter(await timetablesFetcher());
+    }
+
     return {
         createNewTimetable() {
             redirectHandler(AppRoutes.NEW_TIMETABLE);
         },
-        async presentTimetables() {
+        async initializeTimetablesList() {
             try {
-                timetablesPresenter(await timetablesFetcher());
+                await loadTimetables();
             } catch (error) {
                 errorHandler(error);
             }
         },
         async deleteTimetable(id: string) {
-            console.log(id);
+            try {
+                await timetableDeleteFetcher(id);
+                await loadTimetables();
+            } catch (error) {
+                errorHandler(error);
+            }
         },
     };
 }

@@ -8,20 +8,24 @@ function createMockedTimetablesController({
     timetablesPresenter,
     errorHandler,
     redirectHandler,
+    timetableDeleteFetcher,
 }: Partial<TimetablesListControllerDependencies>) {
     return createTimetablesListController({
         timetablesFetcher: timetablesFetcher ?? jest.fn(),
         timetablesPresenter: timetablesPresenter ?? jest.fn(),
         errorHandler: errorHandler ?? jest.fn(),
         redirectHandler: redirectHandler ?? jest.fn(),
+        timetableDeleteFetcher: timetableDeleteFetcher ?? jest.fn(),
     });
 }
 
 type Presenter = TimetablesListControllerDependencies['timetablesPresenter'];
 type TimetablesFetcher = TimetablesListControllerDependencies['timetablesFetcher'];
 type ErrorHandler = TimetablesListControllerDependencies['errorHandler'];
+type RedirectHandler = TimetablesListControllerDependencies['redirectHandler'];
+type TimetableDeleteFetcher = TimetablesListControllerDependencies['timetableDeleteFetcher'];
 
-describe('Present timetables', () => {
+describe('Initialize timetables list', () => {
     describe('Given resolving timetables fetcher', () => {
         const TEST_TIMETABLES_SHORT_INFO: TimetablesShortInfo[] = [
             { id: 'id', name: 'timetable' },
@@ -42,7 +46,7 @@ describe('Present timetables', () => {
                 timetablesPresenter: timetablesPresenterMock,
             });
 
-            await controller.presentTimetables();
+            await controller.initializeTimetablesList();
 
             expect(resolvingTimetablesFetcherMock).toHaveBeenCalled();
             expect(timetablesPresenterMock).toHaveBeenCalledWith(TEST_TIMETABLES_SHORT_INFO);
@@ -67,7 +71,7 @@ describe('Present timetables', () => {
                 errorHandler: errorHandlerMock,
             });
 
-            await controller.presentTimetables();
+            await controller.initializeTimetablesList();
 
             expect(errorHandlerMock).toHaveBeenCalledWith(FETCH_ERROR);
         });
@@ -76,7 +80,7 @@ describe('Present timetables', () => {
 
 describe('Create new timetable', () => {
     it('should redirect to timetable creation path', () => {
-        const redirectHandlerMock = jest.fn();
+        const redirectHandlerMock: RedirectHandler = jest.fn();
 
         const controller = createMockedTimetablesController({
             redirectHandler: redirectHandlerMock,
@@ -85,5 +89,58 @@ describe('Create new timetable', () => {
         controller.createNewTimetable();
 
         expect(redirectHandlerMock).toHaveBeenCalledWith(AppRoutes.NEW_TIMETABLE);
+    });
+});
+
+describe('Delete new timetable', () => {
+    const TIMETABLE_ID = 'id';
+
+    describe('Given resolving delete fetcher', () => {
+        let resolvingTimetableDeleteFetcherMock: TimetableDeleteFetcher = jest.fn();
+
+        beforeEach(() => {
+            resolvingTimetableDeleteFetcherMock = jest.fn();
+        });
+
+        it('should call delete fetcher with given id and reload timetables', async () => {
+            const resolvingTimetablesFetcherMock: TimetablesFetcher = jest.fn(
+                () => Promise.resolve([]),
+            );
+            const presenterMock: Presenter = jest.fn();
+
+            const controller = createMockedTimetablesController({
+                timetablesFetcher: resolvingTimetablesFetcherMock,
+                timetableDeleteFetcher: resolvingTimetableDeleteFetcherMock,
+                timetablesPresenter: presenterMock,
+            });
+
+            await controller.deleteTimetable(TIMETABLE_ID);
+
+            expect(resolvingTimetableDeleteFetcherMock).toHaveBeenCalledWith(TIMETABLE_ID);
+            expect(resolvingTimetablesFetcherMock).toHaveBeenCalled();
+            expect(presenterMock).toHaveBeenCalled();
+        });
+    });
+
+    describe('Given rejecting delete fetcher', () => {
+        const DELETION_ERROR = new Error('deletion error');
+        let rejectingTimetableDeleteFetcherMock: TimetableDeleteFetcher;
+
+        beforeEach(() => {
+            rejectingTimetableDeleteFetcherMock = jest.fn(() => Promise.reject(DELETION_ERROR));
+        });
+
+        it('should pass error to error handler', async () => {
+            const errorHandlerMock: ErrorHandler = jest.fn();
+
+            const controller = createMockedTimetablesController({
+                timetableDeleteFetcher: rejectingTimetableDeleteFetcherMock,
+                errorHandler: errorHandlerMock,
+            });
+
+            await controller.deleteTimetable(TIMETABLE_ID);
+
+            expect(errorHandlerMock).toHaveBeenCalledWith(DELETION_ERROR);
+        });
     });
 });
