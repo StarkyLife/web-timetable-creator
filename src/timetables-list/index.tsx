@@ -1,37 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import {
     Box,
     Button,
     CircularProgress,
     List,
-    ListItem,
     Typography,
 } from '@material-ui/core';
 
-import { fetchers } from '../api/fetchers';
-import { AppRoutes } from '../app-routes';
-
-import { presentTimetablesList } from './presenter';
-import { TimetablesListViewModel } from './view-model';
+import { useTimetablesListController } from './hook';
+import { TimetablesListItem } from './timetables-list-item';
 
 export const TimetablesList: React.FC = () => {
-    const history = useHistory();
-
-    const handleCreateButtonClick = useCallback(() => {
-        history.push(AppRoutes.NEW_TIMETABLE);
-    }, [history]);
-
-    const [timetablesListVM, setTimetablesVM] = useState<TimetablesListViewModel | null>(null);
-
-    useEffect(() => {
-        async function fetchData() {
-            const timetables = await fetchers.getTimetablesShortInfoList();
-
-            setTimetablesVM(presentTimetablesList(timetables));
-        }
-        fetchData();
-    }, []);
+    const {
+        timetablesListVM,
+        handleTimetableCreate,
+        handleTimetableDelete,
+    } = useTimetablesListController();
 
     if (!timetablesListVM) {
         return <CircularProgress />;
@@ -45,13 +29,15 @@ export const TimetablesList: React.FC = () => {
             { !!timetablesListVM.timetables && (
                 <List>
                     { timetablesListVM.timetables.map((t) => (
-                        <ListItem key={ t.id } button={ true } divider={ true }>
-                            { t.name }
-                        </ListItem>
+                        <TimetablesListItem
+                            key={ t.id }
+                            { ...t }
+                            onDelete={ handleTimetableDelete }
+                        />
                     )) }
                 </List>
             ) }
-            <Button variant="contained" color="primary" onClick={ handleCreateButtonClick }>
+            <Button variant="contained" color="primary" onClick={ handleTimetableCreate }>
                 { timetablesListVM.createNewTimetableButtonName }
             </Button>
         </Box>

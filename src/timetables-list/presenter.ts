@@ -8,7 +8,9 @@ export function presentTimetablesList(
 ): TimetablesListViewModel {
     return {
         title: i18n.timetablesListTitle,
-        timetables: timetables?.length ? timetables : undefined,
+        timetables: timetables?.length
+            ? timetables.map((t) => ({ ...t, deleteButtonName: i18n.timetableDeleteButtonName }))
+            : undefined,
         createNewTimetableButtonName: i18n.createNewTimetableButtonName,
     };
 }

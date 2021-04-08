@@ -1,5 +1,11 @@
+export type TimetablesListItemViewModel = {
+    id: string;
+    name: string;
+    deleteButtonName: string;
+};
+
 export type TimetablesListViewModel = {
     title: string;
-    timetables?: Array<{ id: string; name: string }>;
+    timetables?: TimetablesListItemViewModel[];
     createNewTimetableButtonName: string;
 };

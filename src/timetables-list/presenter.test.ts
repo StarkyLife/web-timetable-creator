@@ -40,7 +40,10 @@ it('should list of timetables given timetables', () => {
         timetablesShortInfo,
         {
             ...defaultEmtpyViewModel,
-            timetables: timetablesShortInfo,
+            timetables: [
+                { id: '1', name: 'first', deleteButtonName: i18n.timetableDeleteButtonName },
+                { id: '2', name: 'second', deleteButtonName: i18n.timetableDeleteButtonName },
+            ],
         },
     );
 });
