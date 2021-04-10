@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 
 import { fetchers } from '../../api/fetchers';
+import { TimetableViewModel } from '../models/timetable-view-model';
 import { createTimetableController } from '../timetable-controller';
-import { presentTimetable } from '../timetable-presenter';
 
 import { Timetable } from './timetable-form';
 
@@ -11,15 +12,28 @@ import { Timetable } from './timetable-form';
 const errorHandler = () => alert('Something is wrong!');
 
 export const TimetableContainer: React.FC = () => {
-    const newTimetableViewModel = presentTimetable();
-
     const history = useHistory();
 
     const controller = useMemo(() => createTimetableController({
         saveHandler: fetchers.saveTimetable,
+        getTimetable: fetchers.getTimetable,
         errorHandler,
         redirectHandler: history.push,
     }), [history]);
 
-    return <Timetable { ...newTimetableViewModel } onSubmit={ controller.submit } />;
+    const [viewModel, setViewModel] = useState<TimetableViewModel | null>(null);
+
+    const { id } = useParams<{ id: string }>();
+
+    useEffect(() => {
+        controller.initializeTimetable(id)
+            .then(setViewModel);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
+
+    if (!viewModel) {
+        return <CircularProgress />;
+    }
+
+    return <Timetable { ...viewModel } onSubmit={ controller.submit } />;
 };

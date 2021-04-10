@@ -6,23 +6,26 @@ import {
 import { TimetableFormFields } from '../models/timetable-form-fields-model';
 import { TimetableViewModel } from '../models/timetable-view-model';
 
-type Props = TimetableViewModel & { onSubmit: (formData: TimetableFormFields) => void };
+type Props = TimetableViewModel & {
+    onSubmit: (formData: TimetableFormFields, timetableId?: string) => void;
+};
 
 export const Timetable: React.FC<Props> = ({
+    id,
     title,
-    inputName,
+    timetableName,
     submitButtonName,
     onSubmit,
 }) => {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(timetableName.value);
 
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
     }, [setInputValue]);
 
     const handleSubmit = useCallback(() => {
-        onSubmit({ name: inputValue });
-    }, [onSubmit, inputValue]);
+        onSubmit({ name: inputValue }, id);
+    }, [onSubmit, inputValue, id]);
 
     return (
         <Box>
@@ -30,7 +33,7 @@ export const Timetable: React.FC<Props> = ({
                 { title }
             </Typography>
             <TextField
-                label={ inputName }
+                label={ timetableName.label }
                 variant="outlined"
                 fullWidth={ true }
                 value={ inputValue }

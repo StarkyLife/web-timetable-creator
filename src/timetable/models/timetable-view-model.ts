@@ -1,5 +1,9 @@
 export type TimetableViewModel = {
+    id?: string;
     title: string;
-    inputName: string;
+    timetableName: {
+        label: string;
+        value: string;
+    };
     submitButtonName: string;
 };
