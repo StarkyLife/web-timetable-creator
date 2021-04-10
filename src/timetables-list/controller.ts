@@ -25,6 +25,9 @@ export function createTimetablesListController({
         createNewTimetable() {
             redirectHandler(AppRoutes.NEW_TIMETABLE);
         },
+        editExistingTimetable(id: string) {
+            redirectHandler(AppRoutes.getExistingTimetablePath(id));
+        },
         async initializeTimetablesList() {
             try {
                 await loadTimetables();

@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 
-import { NewTimetable } from './timetable/components/new-timetable';
+import { TimetableContainer } from './timetable/components/timetable-container';
 import { AppRoutes } from './app-routes';
 import { TimetablesList } from './timetables-list';
 
@@ -13,7 +13,10 @@ export const App: React.FC = () => (
                 <TimetablesList />
             </Route>
             <Route path={ AppRoutes.NEW_TIMETABLE }>
-                <NewTimetable />
+                <TimetableContainer />
+            </Route>
+            <Route path={ AppRoutes.getExistingTimetablePath(':id') }>
+                <TimetableContainer />
             </Route>
         </Switch>
     </Container>

@@ -10,7 +10,7 @@ import { Timetable } from './timetable-form';
 // eslint-disable-next-line no-alert
 const errorHandler = () => alert('Something is wrong!');
 
-export const NewTimetable: React.FC = () => {
+export const TimetableContainer: React.FC = () => {
     const newTimetableViewModel = presentTimetable();
 
     const history = useHistory();

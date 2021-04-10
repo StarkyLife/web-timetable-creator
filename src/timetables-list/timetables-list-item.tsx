@@ -8,20 +8,27 @@ import {
 
 import { TimetablesListItemViewModel } from './view-model';
 
-type Props = TimetablesListItemViewModel & { onDelete: (id: string) => void };
+type Props = TimetablesListItemViewModel & {
+    onEdit: (id: string) => void;
+    onDelete: (id: string) => void;
+};
 
 export const TimetablesListItem: React.FC<Props> = ({
     id,
     name,
     deleteButtonName,
+    onEdit,
     onDelete,
 }) => {
+    const handleEditClick = useCallback(() => {
+        onEdit(id);
+    }, [onEdit, id]);
     const handleDeleteClick = useCallback(() => {
         onDelete(id);
     }, [onDelete, id]);
 
     return (
-        <ListItem button={ true } divider={ true }>
+        <ListItem button={ true } divider={ true } onClick={ handleEditClick }>
             <ListItemText>{ name }</ListItemText>
             <ListItemSecondaryAction>
                 <Button onClick={ handleDeleteClick }>

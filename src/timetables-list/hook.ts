@@ -1,5 +1,7 @@
 import {
-    useCallback, useEffect, useMemo, useState,
+    useEffect,
+    useMemo,
+    useState,
 } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -30,17 +32,10 @@ export function useTimetablesListController() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleTimetableCreate = useCallback(() => {
-        controller.createNewTimetable();
-    }, [controller]);
-
-    const handleTimetableDelete = useCallback((id: string) => {
-        controller.deleteTimetable(id);
-    }, [controller]);
-
     return {
         timetablesListVM,
-        handleTimetableDelete,
-        handleTimetableCreate,
+        handleTimetableCreate: controller.createNewTimetable,
+        handleTimetableEdit: controller.editExistingTimetable,
+        handleTimetableDelete: controller.deleteTimetable,
     };
 }

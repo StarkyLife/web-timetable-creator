@@ -14,6 +14,7 @@ export const TimetablesList: React.FC = () => {
     const {
         timetablesListVM,
         handleTimetableCreate,
+        handleTimetableEdit,
         handleTimetableDelete,
     } = useTimetablesListController();
 
@@ -32,6 +33,7 @@ export const TimetablesList: React.FC = () => {
                         <TimetablesListItem
                             key={ t.id }
                             { ...t }
+                            onEdit={ handleTimetableEdit }
                             onDelete={ handleTimetableDelete }
                         />
                     )) }

@@ -92,6 +92,22 @@ describe('Create new timetable', () => {
     });
 });
 
+describe('Edit existing timetable', () => {
+    it('should redirect to existing timetable route path', () => {
+        const EXISTING_TIMETABLE_ID = 'timetable-id';
+        const redirectHandlerMock: RedirectHandler = jest.fn();
+
+        const controller = createMockedTimetablesController({
+            redirectHandler: redirectHandlerMock,
+        });
+
+        controller.editExistingTimetable(EXISTING_TIMETABLE_ID);
+
+        expect(redirectHandlerMock)
+            .toHaveBeenCalledWith(AppRoutes.getExistingTimetablePath(EXISTING_TIMETABLE_ID));
+    });
+});
+
 describe('Delete new timetable', () => {
     const TIMETABLE_ID = 'id';
 
