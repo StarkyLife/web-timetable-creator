@@ -3,10 +3,10 @@ import {
     Box, Button, TextField, Typography,
 } from '@material-ui/core';
 
+import { TimetableFormFields } from '../models/timetable-form-fields-model';
 import { TimetableViewModel } from '../models/timetable-view-model';
-import { createSubmitHandler } from '../timetable-controller';
 
-type Props = TimetableViewModel & { onSubmit: ReturnType<typeof createSubmitHandler> };
+type Props = TimetableViewModel & { onSubmit: (formData: TimetableFormFields) => void };
 
 export const Timetable: React.FC<Props> = ({
     title,

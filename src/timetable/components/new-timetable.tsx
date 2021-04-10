@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { fetchers } from '../../api/fetchers';
-import { createSubmitHandler } from '../timetable-controller';
+import { createTimetableController } from '../timetable-controller';
 import { presentTimetable } from '../timetable-presenter';
 
 import { Timetable } from './timetable-form';
@@ -15,15 +15,11 @@ export const NewTimetable: React.FC = () => {
 
     const history = useHistory();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const submitHandler = useCallback(
-        createSubmitHandler(
-            fetchers.saveTimetable,
-            errorHandler,
-            history.push,
-        ),
-        [history],
-    );
+    const controller = useMemo(() => createTimetableController({
+        saveHandler: fetchers.saveTimetable,
+        errorHandler,
+        redirectHandler: history.push,
+    }), [history]);
 
-    return <Timetable { ...newTimetableViewModel } onSubmit={ submitHandler } />;
+    return <Timetable { ...newTimetableViewModel } onSubmit={ controller.submit } />;
 };

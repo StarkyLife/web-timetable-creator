@@ -1,41 +1,28 @@
-// import { AppRoutes } from '../app-routes';
-
 import { AppRoutes } from '../app-routes';
 
 import { TimetableFormFields } from './models/timetable-form-fields-model';
 import {
-    createSubmitHandler,
-    TimetableSubmitErrorHandler,
-    TimetableSubmitRedirectHandler,
-    TimetableSubmitSaveHandler,
+    createTimetableController,
+    TimetableControllerDeps,
 } from './timetable-controller';
+
+function createMockedTimetableController(
+    deps: Partial<TimetableControllerDeps>,
+) {
+    return createTimetableController({
+        saveHandler: deps.saveHandler ?? jest.fn(),
+        errorHandler: deps.errorHandler ?? jest.fn(),
+        redirectHandler: deps.redirectHandler ?? jest.fn(),
+    });
+}
+
+export type TimetableSubmitErrorHandler = TimetableControllerDeps['errorHandler'];
+export type TimetableSubmitRedirectHandler = TimetableControllerDeps['redirectHandler'];
+export type TimetableSubmitSaveHandler = TimetableControllerDeps['saveHandler'];
 
 const DEFAULT_FORM_DATA: TimetableFormFields = { name: 'timetable' };
 
-function createAndSubmit(
-    saveHandler: TimetableSubmitSaveHandler,
-    errorHandler: TimetableSubmitErrorHandler,
-    redirectHandler: TimetableSubmitRedirectHandler,
-    submittedData: TimetableFormFields,
-) {
-    const sumbitHandler = createSubmitHandler(
-        saveHandler,
-        errorHandler,
-        redirectHandler,
-    );
-
-    return sumbitHandler(submittedData);
-}
-
-describe('Given error and redirect handlers', () => {
-    let errorHandlerMock: TimetableSubmitErrorHandler;
-    let redirectHandlerMock: TimetableSubmitRedirectHandler;
-
-    beforeEach(() => {
-        errorHandlerMock = jest.fn();
-        redirectHandlerMock = jest.fn();
-    });
-
+describe('Submitting form data', () => {
     describe('Given resolving save handler', () => {
         let resolvingSaveHandlerMock: TimetableSubmitSaveHandler;
 
@@ -44,12 +31,14 @@ describe('Given error and redirect handlers', () => {
         });
 
         it('should save the form data and redirect to base path', async () => {
-            await createAndSubmit(
-                resolvingSaveHandlerMock,
-                errorHandlerMock,
-                redirectHandlerMock,
-                DEFAULT_FORM_DATA,
-            );
+            const redirectHandlerMock: TimetableSubmitRedirectHandler = jest.fn();
+
+            const controller = createMockedTimetableController({
+                saveHandler: resolvingSaveHandlerMock,
+                redirectHandler: redirectHandlerMock,
+            });
+
+            await controller.submit(DEFAULT_FORM_DATA);
 
             expect(resolvingSaveHandlerMock).toHaveBeenCalledWith(DEFAULT_FORM_DATA);
             expect(redirectHandlerMock).toHaveBeenCalledWith(AppRoutes.DEFAULT);
@@ -65,12 +54,16 @@ describe('Given error and redirect handlers', () => {
         });
 
         it('should pass error to error handler and should not redirect', async () => {
-            await createAndSubmit(
-                rejectingSaveHandlerMock,
-                errorHandlerMock,
-                redirectHandlerMock,
-                DEFAULT_FORM_DATA,
-            );
+            const errorHandlerMock: TimetableSubmitErrorHandler = jest.fn();
+            const redirectHandlerMock: TimetableSubmitRedirectHandler = jest.fn();
+
+            const controller = createMockedTimetableController({
+                saveHandler: rejectingSaveHandlerMock,
+                errorHandler: errorHandlerMock,
+                redirectHandler: redirectHandlerMock,
+            });
+
+            await controller.submit(DEFAULT_FORM_DATA);
 
             expect(errorHandlerMock).toHaveBeenCalledWith(error);
             expect(redirectHandlerMock).not.toHaveBeenCalled();
