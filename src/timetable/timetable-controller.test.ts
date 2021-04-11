@@ -1,9 +1,7 @@
 import { Timetable } from '../api/models';
 import { AppRoutes } from '../app-routes';
-import { i18n } from '../i18n';
 
 import { TimetableFormFields } from './models/timetable-form-fields-model';
-import { TimetableViewModel } from './models/timetable-view-model';
 import {
     createTimetableController,
     TimetableControllerDeps,
@@ -17,6 +15,7 @@ function createMockedTimetableController(
         getTimetable: deps.getTimetable ?? jest.fn(),
         errorHandler: deps.errorHandler ?? jest.fn(),
         redirectHandler: deps.redirectHandler ?? jest.fn(),
+        timetablePresenter: deps.timetablePresenter ?? jest.fn(),
     });
 }
 
@@ -24,6 +23,7 @@ export type ErrorHandler = TimetableControllerDeps['errorHandler'];
 export type RedirectHandler = TimetableControllerDeps['redirectHandler'];
 export type TimetableSaveHandler = TimetableControllerDeps['saveHandler'];
 export type TimetableGetter = TimetableControllerDeps['getTimetable'];
+export type TimetablePresenter = TimetableControllerDeps['timetablePresenter'];
 
 const DEFAULT_FORM_DATA: TimetableFormFields = { name: 'timetable' };
 
@@ -81,21 +81,20 @@ describe('Submitting form data', () => {
 });
 
 describe('Initialize timetable', () => {
-    const EMPTY_TIMETABLE_VIEW_MODEL: TimetableViewModel = {
-        title: i18n.timetableCreationTitle,
-        timetableName: {
-            label: i18n.timetableNameInput,
-            value: '',
-        },
-        submitButtonName: i18n.timetableSaveButtonName,
-    };
+    let timetablePresenterMock: TimetablePresenter;
 
-    it('should initialize with empty view model when no ID is given', async () => {
-        const controller = createMockedTimetableController({});
+    beforeEach(() => {
+        timetablePresenterMock = jest.fn();
+    });
 
-        const timetableViewModel = await controller.initializeTimetable();
+    it('should pass null to presenter given no ID', async () => {
+        const controller = createMockedTimetableController({
+            timetablePresenter: timetablePresenterMock,
+        });
 
-        expect(timetableViewModel).toEqual(EMPTY_TIMETABLE_VIEW_MODEL);
+        await controller.initializeTimetable();
+
+        expect(timetablePresenterMock).toHaveBeenCalledWith(null);
     });
 
     describe('Given rejecting timetable getter', () => {
@@ -106,17 +105,18 @@ describe('Initialize timetable', () => {
             rejectingTimetableGetter = jest.fn(() => Promise.reject(TIMETABLE_GET_ERROR));
         });
 
-        it('should pass error to error handler and return null', async () => {
+        it('should pass error to error handler', async () => {
             const errorHandlerMock: ErrorHandler = jest.fn();
 
             const controller = createMockedTimetableController({
                 getTimetable: rejectingTimetableGetter,
                 errorHandler: errorHandlerMock,
+                timetablePresenter: timetablePresenterMock,
             });
 
-            const timetableViewModel = await controller.initializeTimetable('random');
+            await controller.initializeTimetable('random');
 
-            expect(timetableViewModel).toBeNull();
+            expect(timetablePresenterMock).not.toHaveBeenCalled();
             expect(errorHandlerMock).toHaveBeenCalledWith(TIMETABLE_GET_ERROR);
         });
     });
@@ -132,22 +132,16 @@ describe('Initialize timetable', () => {
             resolvingTimetableGetter = jest.fn(() => Promise.resolve(TIMETABLE));
         });
 
-        it('should return view model with values inputs', async () => {
+        it('should pass timetable to presenter', async () => {
             const controller = createMockedTimetableController({
                 getTimetable: resolvingTimetableGetter,
+                timetablePresenter: timetablePresenterMock,
             });
 
-            const timetableViewModel = await controller.initializeTimetable(TIMETABLE.id);
+            await controller.initializeTimetable(TIMETABLE.id);
 
             expect(resolvingTimetableGetter).toHaveBeenCalledWith(TIMETABLE.id);
-            expect(timetableViewModel).toEqual({
-                ...EMPTY_TIMETABLE_VIEW_MODEL,
-                id: TIMETABLE.id,
-                timetableName: {
-                    ...EMPTY_TIMETABLE_VIEW_MODEL.timetableName,
-                    value: TIMETABLE.name,
-                },
-            });
+            expect(timetablePresenterMock).toHaveBeenCalledWith(TIMETABLE);
         });
     });
 });
