@@ -19,11 +19,11 @@ function createMockedTimetableController(
     });
 }
 
-export type ErrorHandler = TimetableControllerDeps['errorHandler'];
-export type RedirectHandler = TimetableControllerDeps['redirectHandler'];
-export type TimetableSaveHandler = TimetableControllerDeps['saveHandler'];
-export type TimetableGetter = TimetableControllerDeps['getTimetable'];
-export type TimetablePresenter = TimetableControllerDeps['timetablePresenter'];
+type ErrorHandler = TimetableControllerDeps['errorHandler'];
+type RedirectHandler = TimetableControllerDeps['redirectHandler'];
+type TimetableSaveHandler = TimetableControllerDeps['saveHandler'];
+type TimetableGetter = TimetableControllerDeps['getTimetable'];
+type TimetablePresenter = TimetableControllerDeps['timetablePresenter'];
 
 const DEFAULT_FORM_DATA: TimetableFormFields = { name: 'timetable' };
 
