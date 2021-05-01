@@ -18,6 +18,7 @@ module.exports = {
         '@typescript-eslint',
         'import',
         'react',
+        'cypress',
         'simple-import-sort',
         'unicorn',
     ],
@@ -119,7 +120,7 @@ module.exports = {
         // Imports, file extensions
         'import/no-extraneous-dependencies': [
             'error',
-            { devDependencies: ['**/*.{stories,test,tests,spec}.{js,jsx,ts,tsx}'] },
+            { devDependencies: ['**/*.{stories,test,tests,spec}.{js,jsx,ts,tsx}', 'cypress/**'] },
         ],
         'import/no-cycle': 'off',
         'import/prefer-default-export': 'off',
@@ -161,6 +162,16 @@ module.exports = {
                 node: true,
                 jest: true,
                 browser: true,
+            },
+        },
+        {
+            files: ['**/cypress/**/*'],
+            env: {
+                'cypress/globals': true,
+            },
+            rules: {
+                'cypress/no-assigning-return-values': 'error',
+                'cypress/no-unnecessary-waiting': 'error',
             },
         },
     ],

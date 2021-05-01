@@ -7,7 +7,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" --ext .js,.jsx,.ts,.tsx",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -29,12 +31,16 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "@cypress/browserify-preprocessor": "^3.0.1",
     "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
+    "cypress": "^7.0.1",
+    "cypress-cucumber-preprocessor": "^4.0.3",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-import-resolver-typescript": "^2.2.1",
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.6",
@@ -48,6 +54,9 @@
     "hooks": {
       "pre-commit": "yarn lint"
     }
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
   },
   "browserslist": {
     "production": [
