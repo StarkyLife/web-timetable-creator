@@ -10,9 +10,14 @@ export function presentTimetable(
         id: timetable?.id,
         title: i18n.timetableCreationTitle,
         submitButtonName: i18n.timetableSaveButtonName,
-        timetableName: {
+        formData: {
+            name: timetable?.name ?? '',
+        },
+        timetableNameInput: {
             label: i18n.timetableNameInput,
-            value: timetable?.name ?? '',
+        },
+        newSubjectInput: {
+            label: i18n.timetableNewSubjectInput,
         },
     };
 }

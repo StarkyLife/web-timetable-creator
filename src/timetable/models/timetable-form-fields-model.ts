@@ -1,1 +1,3 @@
-export type TimetableFormFields = { name: string };
+export type TimetableFormFields = {
+    name: string;
+};

@@ -1,8 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, {
+    useCallback, useReducer,
+} from 'react';
 import {
     Box, Button, TextField, Typography,
 } from '@material-ui/core';
 
+import { setFormValueAC, timetableFormReducer } from '../form-reducer';
 import { TimetableFormFields } from '../models/timetable-form-fields-model';
 import { TimetableViewModel } from '../models/timetable-view-model';
 
@@ -13,19 +16,17 @@ type Props = TimetableViewModel & {
 export const Timetable: React.FC<Props> = ({
     id,
     title,
-    timetableName,
+    formData,
+    timetableNameInput,
+    // newSubjectInput,
     submitButtonName,
     onSubmit,
 }) => {
-    const [inputValue, setInputValue] = useState(timetableName.value);
-
-    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
-    }, [setInputValue]);
+    const [state, dispatch] = useReducer(timetableFormReducer, formData);
 
     const handleSubmit = useCallback(() => {
-        onSubmit({ name: inputValue }, id);
-    }, [onSubmit, inputValue, id]);
+        onSubmit(state, id);
+    }, [onSubmit, state, id]);
 
     return (
         <Box>
@@ -33,12 +34,21 @@ export const Timetable: React.FC<Props> = ({
                 { title }
             </Typography>
             <TextField
-                label={ timetableName.label }
+                label={ timetableNameInput.label }
                 variant="outlined"
                 fullWidth={ true }
-                value={ inputValue }
-                onChange={ handleInputChange }
+                value={ state.name }
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => {
+                    dispatch(setFormValueAC('name', e.target.value));
+                } }
             />
+            { /* <TextField */ }
+            { /*     label={ newSubjectInput.label } */ }
+            { /*     variant="outlined" */ }
+            { /*     fullWidth={ true } */ }
+            { /*     value={ inputValue } */ }
+            { /*     onChange={ handleInputChange } */ }
+            { /* /> */ }
             <Button variant="contained" color="primary" onClick={ handleSubmit }>
                 { submitButtonName }
             </Button>

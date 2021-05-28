@@ -6,9 +6,14 @@ import { presentTimetable } from './presenter';
 
 const EMPTY_TIMETABLE_VIEW_MODEL: TimetableViewModel = {
     title: i18n.timetableCreationTitle,
-    timetableName: {
+    formData: {
+        name: '',
+    },
+    timetableNameInput: {
         label: i18n.timetableNameInput,
-        value: '',
+    },
+    newSubjectInput: {
+        label: i18n.timetableNewSubjectInput,
     },
     submitButtonName: i18n.timetableSaveButtonName,
 };
@@ -32,9 +37,9 @@ it('should return view model with inputs values given timetable', () => {
     ).toEqual({
         ...EMPTY_TIMETABLE_VIEW_MODEL,
         id: TIMETABLE.id,
-        timetableName: {
-            ...EMPTY_TIMETABLE_VIEW_MODEL.timetableName,
-            value: TIMETABLE.name,
+        formData: {
+            ...EMPTY_TIMETABLE_VIEW_MODEL.formData,
+            name: TIMETABLE.name,
         },
     });
 });

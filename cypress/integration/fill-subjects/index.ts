@@ -6,11 +6,11 @@ import {
 } from 'cypress-cucumber-preprocessor/steps';
 
 Given('пользователь открыл пустое расписание', () => {
-    throw new Error('Not implemented!');
+    cy.visit('/new');
 });
 
-defineStep('(он )добавит/добавил предмет c названием {string}', () => {
-    throw new Error('Not implemented!');
+defineStep('(он )добавит/добавил предмет c названием {string}', (subjectName: string) => {
+    cy.get('[data-test-id="new-subject"]').type(`${subjectName}{enter}`);
 });
 
 When('он сохранит и переоткроет текущее расписание', () => {
