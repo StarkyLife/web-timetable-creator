@@ -5,6 +5,8 @@ export const russianTexts = {
 
     timetableCreationTitle: 'Создание расписания',
     timetableNameInput: 'Название',
+
+    timetableSubjectsTitle: 'Предметы',
     timetableNewSubjectInput: 'Добавить предмет',
 
     timetableSaveButtonName: 'Сохранить',

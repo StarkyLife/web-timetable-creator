@@ -2,16 +2,16 @@ import { Timetable } from '../api/models';
 import { i18n } from '../i18n';
 
 import { TimetableViewModel } from './models/timetable-view-model';
+import { EMPTY_TIMETABLE_FORM_FIELDS } from './test-data/form-fields-mocks';
 import { presentTimetable } from './presenter';
 
 const EMPTY_TIMETABLE_VIEW_MODEL: TimetableViewModel = {
     title: i18n.timetableCreationTitle,
-    formData: {
-        name: '',
-    },
+    formData: EMPTY_TIMETABLE_FORM_FIELDS,
     timetableNameInput: {
         label: i18n.timetableNameInput,
     },
+    subjectsTitle: i18n.timetableSubjectsTitle,
     newSubjectInput: {
         label: i18n.timetableNewSubjectInput,
     },

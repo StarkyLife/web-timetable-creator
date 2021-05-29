@@ -20,8 +20,8 @@ When('он удалит предмет c названием {string}', () => {
     throw new Error('Not implemented!');
 });
 
-Then('{string} должна быть в списке предметов', () => {
-    throw new Error('Not implemented!');
+Then('{string} должна быть в списке предметов', (subjectName: string) => {
+    cy.get('[data-test-id="subjects-list"]').contains(subjectName);
 });
 Then('{string} должна отсутствовать в списке предметов', () => {
     throw new Error('Not implemented!');

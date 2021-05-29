@@ -5,7 +5,7 @@ import {
     Box, Button, TextField, Typography,
 } from '@material-ui/core';
 
-import { setFormValueAC, timetableFormReducer } from '../form-reducer';
+import { addSubjectAC, setFormValueAC, timetableFormReducer } from '../form-reducer';
 import { TimetableFormFields } from '../models/timetable-form-fields-model';
 import { TimetableViewModel } from '../models/timetable-view-model';
 
@@ -18,7 +18,8 @@ export const Timetable: React.FC<Props> = ({
     title,
     formData,
     timetableNameInput,
-    // newSubjectInput,
+    subjectsTitle,
+    newSubjectInput,
     submitButtonName,
     onSubmit,
 }) => {
@@ -42,13 +43,27 @@ export const Timetable: React.FC<Props> = ({
                     dispatch(setFormValueAC('name', e.target.value));
                 } }
             />
-            { /* <TextField */ }
-            { /*     label={ newSubjectInput.label } */ }
-            { /*     variant="outlined" */ }
-            { /*     fullWidth={ true } */ }
-            { /*     value={ inputValue } */ }
-            { /*     onChange={ handleInputChange } */ }
-            { /* /> */ }
+            <div data-test-id="subjects-list">
+                <Typography variant="h5">
+                    { subjectsTitle }
+                </Typography>
+                { state.subjects.map((s) => <div key={ s.id }>{ s.name }</div>) }
+            </div>
+            <TextField
+                data-test-id="new-subject"
+                label={ newSubjectInput.label }
+                variant="outlined"
+                fullWidth={ true }
+                value={ state.newSubject }
+                onKeyUp={ (e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === 'Enter') {
+                        dispatch(addSubjectAC(state.newSubject));
+                    }
+                } }
+                onChange={ (e: React.ChangeEvent<HTMLInputElement>) => {
+                    dispatch(setFormValueAC('newSubject', e.target.value));
+                } }
+            />
             <Button variant="contained" color="primary" onClick={ handleSubmit }>
                 { submitButtonName }
             </Button>

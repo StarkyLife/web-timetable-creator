@@ -1,7 +1,7 @@
 import { Timetable } from '../api/models';
 import { AppRoutes } from '../app-routes';
 
-import { TimetableFormFields } from './models/timetable-form-fields-model';
+import { EMPTY_TIMETABLE_FORM_FIELDS } from './test-data/form-fields-mocks';
 import {
     createTimetableController,
     TimetableControllerDeps,
@@ -25,8 +25,6 @@ type TimetableSaveHandler = TimetableControllerDeps['saveHandler'];
 type TimetableGetter = TimetableControllerDeps['getTimetable'];
 type TimetablePresenter = TimetableControllerDeps['timetablePresenter'];
 
-const DEFAULT_FORM_DATA: TimetableFormFields = { name: 'timetable' };
-
 describe('Submitting form data', () => {
     describe('Given resolving save handler', () => {
         let resolvingSaveHandlerMock: TimetableSaveHandler;
@@ -44,11 +42,15 @@ describe('Submitting form data', () => {
                 redirectHandler: redirectHandlerMock,
             });
 
-            await controller.submit(DEFAULT_FORM_DATA, EXISTING_TIMETABLE_ID);
+            await controller.submit({
+                ...EMPTY_TIMETABLE_FORM_FIELDS,
+                name: 'timetable',
+                newSubject: 'newSubject',
+            }, EXISTING_TIMETABLE_ID);
 
             expect(resolvingSaveHandlerMock).toHaveBeenCalledWith({
-                ...DEFAULT_FORM_DATA,
                 id: EXISTING_TIMETABLE_ID,
+                name: 'timetable',
             });
             expect(redirectHandlerMock).toHaveBeenCalledWith(AppRoutes.DEFAULT);
         });
@@ -72,7 +74,7 @@ describe('Submitting form data', () => {
                 redirectHandler: redirectHandlerMock,
             });
 
-            await controller.submit(DEFAULT_FORM_DATA);
+            await controller.submit(EMPTY_TIMETABLE_FORM_FIELDS);
 
             expect(errorHandlerMock).toHaveBeenCalledWith(error);
             expect(redirectHandlerMock).not.toHaveBeenCalled();

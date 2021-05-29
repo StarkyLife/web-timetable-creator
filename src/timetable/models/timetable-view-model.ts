@@ -7,6 +7,7 @@ export type TimetableViewModel = {
     timetableNameInput: {
         label: string;
     };
+    subjectsTitle: string;
     newSubjectInput: {
         label: string;
     };

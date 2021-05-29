@@ -36,8 +36,8 @@ export function createTimetableController({
         async submit(formData: TimetableFormFields, timetableId?: string) {
             try {
                 await saveHandler({
-                    ...formData,
                     id: timetableId,
+                    name: formData.name,
                 });
                 redirectHandler(AppRoutes.DEFAULT);
             } catch (error) {

@@ -1,25 +1,41 @@
-import { TimetableFormFields } from './models/timetable-form-fields-model';
+import { EMPTY_TIMETABLE_FORM_FIELDS } from './test-data/form-fields-mocks';
 import { timetableFormReducer } from './form-reducer';
 
-const INITIAL_STATE: TimetableFormFields = {
-    name: '',
-};
-
 it('should return initial state given no action', () => {
-    const newState = timetableFormReducer(INITIAL_STATE, undefined);
+    const newState = timetableFormReducer(EMPTY_TIMETABLE_FORM_FIELDS, undefined);
 
-    expect(newState).toEqual(INITIAL_STATE);
+    expect(newState).toEqual(EMPTY_TIMETABLE_FORM_FIELDS);
 });
 
 it('should update state with given input\'s value', () => {
-    const newState = timetableFormReducer(INITIAL_STATE, {
+    const newState = timetableFormReducer(EMPTY_TIMETABLE_FORM_FIELDS, {
         type: 'SET_VALUE',
         key: 'name',
         value: 'timetable',
     });
 
     expect(newState).toEqual({
-        ...INITIAL_STATE,
+        ...EMPTY_TIMETABLE_FORM_FIELDS,
         name: 'timetable',
+    });
+});
+
+it('should add new subjects', () => {
+    const EXISTING_SUBJECT = { id: 'testId', name: 'existingSubject' };
+
+    const newState = timetableFormReducer({
+        ...EMPTY_TIMETABLE_FORM_FIELDS,
+        subjects: [EXISTING_SUBJECT],
+    }, {
+        type: 'ADD_SUBJECT',
+        subjectName: 'subjectName',
+    });
+
+    expect(newState).toEqual<typeof newState>({
+        ...EMPTY_TIMETABLE_FORM_FIELDS,
+        subjects: [
+            EXISTING_SUBJECT,
+            { id: expect.any(String), name: 'subjectName' },
+        ],
     });
 });
