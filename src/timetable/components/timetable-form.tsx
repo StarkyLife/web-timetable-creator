@@ -5,7 +5,9 @@ import {
     Box, Button, TextField, Typography,
 } from '@material-ui/core';
 
-import { addSubjectAC, setFormValueAC, timetableFormReducer } from '../form-reducer';
+import {
+    addSubjectAC, deleteSubjectAC, setFormValueAC, timetableFormReducer,
+} from '../form-reducer';
 import { TimetableFormFields } from '../models/timetable-form-fields-model';
 import { TimetableViewModel } from '../models/timetable-view-model';
 
@@ -47,7 +49,19 @@ export const Timetable: React.FC<Props> = ({
                 <Typography variant="h5">
                     { subjectsTitle }
                 </Typography>
-                { state.subjects.map((s) => <div key={ s.id }>{ s.name }</div>) }
+                { state.subjects.map((s) => (
+                    <div key={ s.id }>
+                        { s.name }
+                        <Button
+                            data-test-id={ `${s.name}-delete` }
+                            onClick={ () => {
+                                dispatch(deleteSubjectAC(s.id));
+                            } }
+                        >
+                            X
+                        </Button>
+                    </div>
+                )) }
             </div>
             <TextField
                 data-test-id="new-subject"

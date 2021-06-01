@@ -20,22 +20,39 @@ it('should update state with given input\'s value', () => {
     });
 });
 
-it('should add new subjects', () => {
+describe('With existing subject', () => {
     const EXISTING_SUBJECT = { id: 'testId', name: 'existingSubject' };
 
-    const newState = timetableFormReducer({
-        ...EMPTY_TIMETABLE_FORM_FIELDS,
-        subjects: [EXISTING_SUBJECT],
-    }, {
-        type: 'ADD_SUBJECT',
-        subjectName: 'subjectName',
+    it('should add new subjects', () => {
+        const newState = timetableFormReducer({
+            ...EMPTY_TIMETABLE_FORM_FIELDS,
+            subjects: [EXISTING_SUBJECT],
+        }, {
+            type: 'ADD_SUBJECT',
+            subjectName: 'subjectName',
+        });
+
+        expect(newState).toEqual<typeof newState>({
+            ...EMPTY_TIMETABLE_FORM_FIELDS,
+            subjects: [
+                EXISTING_SUBJECT,
+                { id: expect.any(String), name: 'subjectName' },
+            ],
+        });
     });
 
-    expect(newState).toEqual<typeof newState>({
-        ...EMPTY_TIMETABLE_FORM_FIELDS,
-        subjects: [
-            EXISTING_SUBJECT,
-            { id: expect.any(String), name: 'subjectName' },
-        ],
+    it('should delete existing subject', () => {
+        const newState = timetableFormReducer({
+            ...EMPTY_TIMETABLE_FORM_FIELDS,
+            subjects: [EXISTING_SUBJECT],
+        }, {
+            type: 'DELETE_SUBJECT',
+            subjectId: EXISTING_SUBJECT.id,
+        });
+
+        expect(newState).toEqual<typeof newState>({
+            ...EMPTY_TIMETABLE_FORM_FIELDS,
+            subjects: [],
+        });
     });
 });
